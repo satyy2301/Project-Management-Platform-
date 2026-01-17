@@ -3,6 +3,16 @@
 A modern, full-stack project management application built with **Next.js**, **NestJS**, **PostgreSQL**, and **Docker**. Features role-based access control (RBAC), dark theme, and intuitive team management.
 
 ## 🌟 Features
+<img width="797" height="771" alt="Screenshot 2026-01-17 170238" src="https://github.com/user-attachments/assets/316add04-df08-4e73-85f6-0e0071bf17c7" />
+<img width="864" height="851" alt="Screenshot 2026-01-17 170245" src="https://github.com/user-attachments/assets/1bfd1402-8440-402c-8f9b-9f0ca6318617" />
+
+<img width="1730" height="702" alt="Screenshot 2026-01-17 170255" src="https://github.com/user-attachments/assets/1cc2de04-7704-4e7e-8e24-28d29c8713ba" />
+
+<img width="1750" height="668" alt="Screenshot 2026-01-17 170304" src="https://github.com/user-attachments/assets/4a870498-2d37-482d-9dfd-1729cf2a763d" />
+
+<img width="1323" height="744" alt="Screenshot 2026-01-17 170313" src="https://github.com/user-attachments/assets/369852e8-7513-4dc3-ab2b-c7484b0d0f7f" />
+
+<img width="1090" height="764" alt="Screenshot 2026-01-17 170326" src="https://github.com/user-attachments/assets/06044869-d3f8-468f-8bee-cd695fe81557" />
 
 - **Authentication & Authorization**
   - JWT-based authentication with secure password hashing (bcryptjs)
