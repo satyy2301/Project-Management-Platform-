@@ -5,7 +5,8 @@ import { Task } from '../entities/task.entity';
 const baseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   entities: [User, Task],
-  synchronize: process.env.NODE_ENV !== 'production',
+  synchronize:
+    process.env.TYPEORM_SYNCHRONIZE === 'true' || process.env.NODE_ENV !== 'production',
   logging: false,
 };
 
