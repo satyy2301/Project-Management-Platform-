@@ -15,6 +15,8 @@ export interface Task {
 
 export type TaskFilter = 'all' | 'pending' | 'completed';
 
+export type SortOption = 'dueDate' | 'newest' | 'title';
+
 export interface CreateTaskInput {
   title: string;
   description?: string;

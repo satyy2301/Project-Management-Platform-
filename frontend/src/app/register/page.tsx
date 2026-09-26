@@ -2,19 +2,38 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
+import { useAuthStore } from '@/store/authStore';
+import { AuthLayout } from '@/components/layout/AuthLayout';
+import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
+import { Button } from '@/components/ui/Button';
+import { Alert } from '@/components/ui/Alert';
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [touched, setTouched] = useState({ email: false, password: false });
   const router = useRouter();
   const register = useAuthStore((state) => state.register);
 
+  const emailError =
+    touched.email && email && !EMAIL_RE.test(email) ? 'Enter a valid email address' : undefined;
+  const passwordError =
+    touched.password && password && password.length < 8
+      ? 'Password must be at least 8 characters'
+      : undefined;
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTouched({ email: true, password: true });
+
+    if (!EMAIL_RE.test(email) || password.length < 8) return;
+
     setLoading(true);
     setError('');
 
@@ -29,66 +48,46 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-2">
-            TaskFlow
-          </h1>
-          <h2 className="text-2xl font-bold text-white">Create Account</h2>
-          <p className="mt-2 text-slate-400">Start managing your tasks today</p>
-        </div>
+    <AuthLayout title="Create Account" subtitle="Start managing your tasks today">
+      <form className="space-y-5" onSubmit={handleRegister}>
+        {error && <Alert message={error} onDismiss={() => setError('')} />}
 
-        <form className="mt-8 space-y-5" onSubmit={handleRegister}>
-          {error && (
-            <div className="rounded-lg bg-red-950 border border-red-900 p-4 text-red-200">
-              <p className="text-sm">{error}</p>
-            </div>
-          )}
+        <Input
+          label="Email address"
+          type="email"
+          required
+          placeholder="your@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+          error={emailError}
+          autoComplete="email"
+        />
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-slate-300 text-sm font-medium mb-2">Email address</label>
-              <input
-                type="email"
-                required
-                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+        <PasswordInput
+          label="Password"
+          required
+          minLength={8}
+          placeholder="Minimum 8 characters"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onBlur={() => setTouched((t) => ({ ...t, password: true }))}
+          error={passwordError}
+          hint={!passwordError ? 'Minimum 8 characters' : undefined}
+          autoComplete="new-password"
+        />
 
-            <div>
-              <label className="block text-slate-300 text-sm font-medium mb-2">Password</label>
-              <input
-                type="password"
-                required
-                minLength={8}
-                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                placeholder="Minimum 8 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
+        <Button type="submit" loading={loading} className="w-full" size="lg">
+          Create Account
+        </Button>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 transition"
-          >
-            {loading ? 'Creating account...' : 'Create Account'}
-          </button>
-
-          <p className="text-center text-sm text-slate-400">
-            Already have an account?{' '}
-            <Link href="/login" className="font-medium text-blue-400 hover:text-blue-300 transition">
-              Sign in
-            </Link>
-          </p>
-        </form>
-      </div>
-    </div>
+        <p className="text-center text-sm text-[var(--foreground-muted)]">
+          Already have an account?{' '}
+          <Link href="/login" className="font-medium text-[var(--accent-cyan)] hover:opacity-80 transition">
+            Sign in
+          </Link>
+        </p>
+      </form>
+    </AuthLayout>
   );
 }
