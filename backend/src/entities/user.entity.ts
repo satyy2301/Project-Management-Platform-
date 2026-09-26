@@ -1,6 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
-import { Client } from './client.entity';
-import { ProjectUser } from './project-user.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
+import { Task } from './task.entity';
 
 @Entity('users')
 export class User {
@@ -13,11 +19,8 @@ export class User {
   @Column()
   password_hash!: string;
 
-  @Column({ nullable: true })
-  role!: string; // 'admin' or 'member' - global role
-
-  @Column()
-  client_id!: string;
+  @Column({ type: 'varchar', nullable: true })
+  refresh_token_hash!: string | null;
 
   @CreateDateColumn()
   created_at!: Date;
@@ -25,10 +28,6 @@ export class User {
   @UpdateDateColumn()
   updated_at!: Date;
 
-  @ManyToOne(() => Client, (client) => client.users, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'client_id' })
-  client!: Client;
-
-  @OneToMany(() => ProjectUser, (projectUser) => projectUser.user)
-  projectUsers!: ProjectUser[];
+  @OneToMany(() => Task, (task) => task.user)
+  tasks!: Task[];
 }
